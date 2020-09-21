@@ -9,8 +9,8 @@ import os
 # second link
 
 #Authenticate
-auth = tweepy.OAuthHandler("apikey", "apisecret")
-auth.set_access_token("access", "accesssecret")
+auth = tweepy.OAuthHandler("YLp44QDJH8WzsNlmCznhcXmAT", "aPoYZIj0zLjtt6yaqLKvfJbGkqadetQwcGkducbqqyQF4nrNNJ")
+auth.set_access_token("885771179356819457-L2pq3Za7fU8EDjDSjKGPAhI3UCkPi4N", "dcypB2cSnAh6f3caE8Hf9PA9EUQxps8iT5ON8uxoANuNx")
 
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
@@ -29,6 +29,15 @@ def send_Image_Tweet(url, message):
         os.remove(filename)
     else:
         print("Error! Unable to download image.")
+
+def get_Timeline():
+    timeline = api.home_timeline()
+    filename = 'recent-timeline.txt'
+    with open(filename, 'w+') as f:
+        for tweet in timeline:
+            message = f"{tweet.user.name} said: {tweet.text}".encode("utf-8")
+            f.write(str(message))
+    return timeline
 
 def main_Menu():
     print("Hello, it is me - Your Command Line Twitter!")
@@ -93,5 +102,6 @@ elif x == "2":
         print("Wrong Choice! Going back to the menu.")
         main_Menu()
 elif x == "3":
+    timeline = get_Timeline()
     pass
     
