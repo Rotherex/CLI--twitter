@@ -26,7 +26,8 @@ def main():
     print("2: Send an Tweet with an Image.")
     print("3: Get API token info.")
     print("4: Setup your Twitter token.")
-    print("5: Quit")
+    print("5: Get User Info inside a .txt file.")
+    print("6: Quit")
     selection = input()
     send_wizard(selection)
 
@@ -75,6 +76,39 @@ def token_setup():
         print("Cancelling setup.")
         main()
 
+def get_User_Info(userName):
+    auth = tweepy.OAuthHandler(tokens[0], tokens[1])
+    auth.set_access_token(tokens[2], tokens[3])
+    api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+    user = api.get_user(userName)
+
+    print("User's Name is: " + user.name)
+    print("User's Description is: " + user.description)
+
+    print("Followers amount is: " + str(user.followers_count))
+
+    for friendsCount in user.friends():
+        friendsCount += 1
+    
+    print("Following Count is:" + str(friendsCount))
+
+    print("Do you want to save those statistics into a .txt file? (Y/N)")
+    userChoice = input()
+    if userChoice == "Y" or "y":
+        filename = str(user.screen_name)+".txt"
+        with open(filename, "w+") as f:
+            f.write("User's Name is: " + user.name)
+            f.write("\nUser's Description is: " + user.description)
+            f.write("\nFollowers amount is: " + str(user.followers_count))
+            f.write("\nFollowing Count is: " + str(friendsCount))
+    elif userChoice == "N" or "n":
+        print("Alright. Going back to the main menu")
+        main()
+    else:
+        print("Wrong Choice! Going back to the main menu.")
+        main()
+
+
 # Sending logic
 def send_wizard(x):
 
@@ -85,9 +119,9 @@ def send_wizard(x):
         print("Ready to send your message, : " + message + " ?")
         print("Y/N")
         userChoice1 = input()
-        if userChoice1 == "Y":
+        if userChoice1 == "Y" or "n":
             send_Tweet(message)
-        elif userChoice1 == "N":
+        elif userChoice1 == "N" or "n":
             print("Going back to the menu.")
             main()
         else:
@@ -100,12 +134,12 @@ def send_wizard(x):
         print("Are you sure this is an direct link?")
         print("Y/N")
         userChoice1 = input()
-        if userChoice1 == "Y":
+        if userChoice1 == "Y" or "n":
             print("Alright, got it. Now what message do you want to add to the image tweet?")
             urlMessage = input()
             print(urlMessage + ". Is that the message you want to add?")
             userChoice2 = input()
-            if userChoice2 == "Y":
+            if userChoice2 == "Y" or "n":
                 print(url + "Is the image link, and \"" + urlMessage + "\" is the message you want to send, do you want to send? (Y/N)")
                 userChoice3 = input()
                 if userChoice3 == "Y" or "y":
@@ -116,13 +150,13 @@ def send_wizard(x):
                 else:
                     print("Wrong Choice! Going back to the menu.")
                     main()
-            elif userChoice2 == "N":
+            elif userChoice2 == "N" or "n":
                 print("Alright. Going back to the menu.")
                 main()
             else:
                 print("Wrong Choice! Going back to the menu.")
                 main()
-        elif userChoice1 == "N":
+        elif userChoice1 == "N" or "n":
             print("Alright. Going back to the menu.")
             main()
         else:
@@ -138,6 +172,20 @@ def send_wizard(x):
         print("Running the twitter token wizard..")
         token_setup()
     elif x == "5":
+        print("Input an Name of the User you want to get data from.")
+        userName = input()
+        print("Are you Sure? (Y/N)")
+        userChoice4 = input()
+        if userChoice4 == "Y" or "n":
+            get_User_Info(userName)
+        elif userChoice4 == "N" or "n":
+            print("Alright. Reopening Main Menu.")
+            main()
+        else:
+            print("Invalid choice. Going back to the Main Menu.")
+            main()
+
+    elif x == "6":
         print("Quitting.")
         exit()
     else:
@@ -145,7 +193,6 @@ def send_wizard(x):
         main()
 
     
-# made by clima :D
-# Edited by simonknowsstuff
+# made by clima (clima ;-;#8707) and simonknowsstuff (simonknowsstuff#7501)
 
 main()
